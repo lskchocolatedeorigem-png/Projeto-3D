@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chocolate Bean to Bar - Experiência 3D</title>
+    <title>Chocolate Bean to Bar - ExperiÃªncia 3D</title>
     
-    <!-- Bibliotecas Necessárias (Three.js para 3D e SDK do Supabase) -->
+    <!-- Bibliotecas NecessÃ¡rias (Three.js para 3D e SDK do Supabase) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -207,13 +207,13 @@
 
     <div id="detalhes-produto">
         <h2 id="prod-nome">Carregando chocolates...</h2>
-        <p id="prod-desc">Nossa vitrine 3D está sendo preparada.</p>
+        <p id="prod-desc">Nossa vitrine 3D estÃ¡ sendo preparada.</p>
         <p class="preco" id="prod-preco">R$ 0,00</p>
         <button onclick="adicionarAoCarrinho()">Adicionar ao Carrinho</button>
         
         <div class="navegacao">
             <button class="btn-nav" onclick="mudarProduto(-1)">? Anterior</button>
-            <button class="btn-nav" onclick="mudarProduto(1)">Próximo ?</button>
+            <button class="btn-nav" onclick="mudarProduto(1)">PrÃ³ximo ?</button>
         </div>
     </div>
 
@@ -239,7 +239,7 @@
             <button onclick="fecharAdmin()" style="width: 100%; background: #7f8c8d; margin-top: 10px;">Cancelar</button>
         </div>
 
-        <!-- Painel de Cadastro (Apenas após login bem-sucedido) -->
+        <!-- Painel de Cadastro (Apenas apÃ³s login bem-sucedido) -->
         <div id="admin-painel" class="admin-box hidden">
             <h2>Painel de Controle</h2>
             <div style="font-size: 0.85em; color: #2ecc71; margin-bottom: 15px;">? Conectado ao Supabase</div>
@@ -247,10 +247,10 @@
             <label>Nome do Chocolate</label>
             <input type="text" id="form-nome" placeholder="Ex: Chocolate 70% Cacau Selvagem">
             
-            <label>Descrição / Origem</label>
-            <textarea id="form-desc" rows="3" placeholder="Ex: Produzido com cacau nativo da Amazônia..."></textarea>
+            <label>DescriÃ§Ã£o / Origem</label>
+            <textarea id="form-desc" rows="3" placeholder="Ex: Produzido com cacau nativo da AmazÃ´nia..."></textarea>
             
-            <label>Preço (R$)</label>
+            <label>PreÃ§o (R$)</label>
             <input type="number" id="form-preco" step="0.01" placeholder="39.90">
             
             <label>Link de Pagamento do Mercado Pago</label>
@@ -269,16 +269,16 @@
         </div>
     </div>
 
-    <!-- --- CÓDIGO DE FUNCIONAMENTO (JAVASCRIPT) --- -->
+    <!-- --- CÃ“DIGO DE FUNCIONAMENTO (JAVASCRIPT) --- -->
     <script>
-        // 1. CONFIGURAÇÃO DO SUPABASE
+        // 1. CONFIGURAÃ‡ÃƒO DO SUPABASE
         // IMPORTANTE: Substitua os dados abaixo com as chaves do seu projeto Supabase
         const SUPABASE_URL = "SUA_SUPABASE_URL_AQUI";
         const SUPABASE_ANON_KEY = "SUA_SUPABASE_ANON_KEY_AQUI";
         
         const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // 2. VARIÁVEIS GLOBAIS DO SISTEMA
+        // 2. VARIÃVEIS GLOBAIS DO SISTEMA
         let cena, camera, renderizador, chocolate3D;
         let listaProdutos = [];
         let indiceAtual = 0;
@@ -296,7 +296,7 @@
             renderizador.setSize(container.clientWidth, container.clientHeight);
             container.appendChild(renderizador.domElement);
 
-            // Iluminação realista para destacar a embalagem
+            // IluminaÃ§Ã£o realista para destacar a embalagem
             const luzAmbiente = new THREE.AmbientLight(0xffffff, 0.8);
             cena.add(luzAmbiente);
 
@@ -304,24 +304,24 @@
             luzDirecional.position.set(5, 5, 5);
             cena.add(luzDirecional);
 
-            // Geometria da barra de chocolate (proporção clássica de barra de chocolate)
+            // Geometria da barra de chocolate (proporÃ§Ã£o clÃ¡ssica de barra de chocolate)
             const geometria = new THREE.BoxGeometry(3.2, 1.8, 0.25);
             const materialChocolate = new THREE.MeshStandardMaterial({ color: 0x2b130a, roughness: 0.6 });
 
-            // Array de materiais para aplicar a imagem apenas na face frontal (índice 4)
+            // Array de materiais para aplicar a imagem apenas na face frontal (Ã­ndice 4)
             const materiais = [
                 materialChocolate, // Direita
                 materialChocolate, // Esquerda
                 materialChocolate, // Cima
                 materialChocolate, // Baixo
-                materialChocolate, // Frente (onde a foto do produto será projetada)
-                materialChocolate  // Trás
+                materialChocolate, // Frente (onde a foto do produto serÃ¡ projetada)
+                materialChocolate  // TrÃ¡s
             ];
 
             chocolate3D = new THREE.Mesh(geometria, materiais);
             cena.add(chocolate3D);
 
-            // Controle de rotação com o mouse/toque
+            // Controle de rotaÃ§Ã£o com o mouse/toque
             let arrastando = false;
             let mouseAnterior = { x: 0, y: 0 };
 
@@ -353,12 +353,12 @@
 
         function animar() {
             requestAnimationFrame(animar);
-            // Rotação automática bem suave para dar vida ao produto
+            // RotaÃ§Ã£o automÃ¡tica bem suave para dar vida ao produto
             chocolate3D.rotation.y += 0.003;
             renderizador.render(cena, camera);
         }
 
-        // 4. INTEGRAÇÃO E CARREGAMENTO DOS DADOS DO SUPABASE
+        // 4. INTEGRAÃ‡ÃƒO E CARREGAMENTO DOS DADOS DO SUPABASE
         async function carregarProdutosDoBanco() {
             const { data, error } = await supabase
                 .from('produtos')
@@ -443,12 +443,12 @@
 
         function finalizarCompra() {
             if (carrinho.length === 0) {
-                alert("Seu carrinho está vazio!");
+                alert("Seu carrinho estÃ¡ vazio!");
                 return;
             }
             // Redireciona para o link do Mercado Pago do primeiro item adicionado
             const primeiroItem = carrinho[0];
-            alert(`Você será redirecionado para o ambiente seguro de pagamento do Mercado Pago para adquirir: ${primeiroItem.nome}`);
+            alert(`VocÃª serÃ¡ redirecionado para o ambiente seguro de pagamento do Mercado Pago para adquirir: ${primeiroItem.nome}`);
             window.location.href = primeiroItem.link_mercado_pago;
         }
 
@@ -529,7 +529,7 @@
                 return;
             }
 
-            // Obter a URL pública da imagem que foi salva
+            // Obter a URL pÃºblica da imagem que foi salva
             const { data: { publicUrl } } = supabase.storage
                 .from('embalagens')
                 .getPublicUrl(filePath);
@@ -543,7 +543,7 @@
                 alert("Erro ao salvar dados do produto: " + insertError.message);
             } else {
                 alert("Chocolate cadastrado com sucesso!");
-                // Limpa o formulário
+                // Limpa o formulÃ¡rio
                 document.getElementById('form-nome').value = '';
                 document.getElementById('form-desc').value = '';
                 document.getElementById('form-preco').value = '';
@@ -584,7 +584,7 @@
             }
         }
 
-        // 7. INICIALIZAÇÃO AUTOMÁTICA AO CARREGAR A PÁGINA
+        // 7. INICIALIZAÃ‡ÃƒO AUTOMÃTICA AO CARREGAR A PÃGINA
         window.onload = () => {
             inicializar3D();
             carregarProdutosDoBanco();
