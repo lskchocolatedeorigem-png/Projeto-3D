@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chocolate Bean to Bar - Experiência 3D</title>
+    
+    <!-- Bibliotecas Necessárias (Three.js para 3D e SDK do Supabase) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        /* --- ESTILOS VISUAIS (CSS) --- */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a0f0a;
+            color: #f5ebe6;
+            overflow-x: hidden;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            background-color: #2b170f;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .logo {
+            font-size: 1.4em;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #canvas-container {
+            width: 100vw;
+            height: 55vh;
+            position: relative;
+            cursor: grab;
+        }
+
+        #canvas-container:active { cursor: grabbing; }
+
+        .instrucoes {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.85em;
+            color: #bfa395;
+            pointer-events: none;
+        }
+
+        #detalhes-produto {
+            text-align: center;
+            padding: 20px;
+            background: #2b170f;
+            margin: -10px auto 20px auto;
+            max-width: 500px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+
+        .preco {
+            font-size: 1.6em;
+            color: #e67e22;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        button {
+            background-color: #e67e22;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        button:hover { background-color: #d35400; }
+
+        .navegacao {
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn-nav { background-color: #3d2216; }
+        .btn-nav:hover { background-color: #522e1e; }
+
+        /* Carrinho Lateral */
+        #carrinho-lateral {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 350px;
+            height: 100%;
+            background-color: #23120b;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+            padding: 20px;
+            box-sizing: border-box;
+            transition: transform 0.3s ease;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #carrinho-lateral.fechado { transform: translateX(100%); }
+
+        #itens-carrinho {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        .item-cart {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #3d2216;
+        }
+
+        .total-carrinho {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 15px 0;
+            text-align: right;
+        }
+
+        .btn-checkout { width: 100%; background-color: #2ecc71; margin-bottom: 10px;}
+        .btn-checkout:hover { background-color: #27ae60; }
+        .btn-fechar { width: 100%; background-color: #7f8c8d; }
+
+        /* Painel Admin Modal */
+        #admin-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.85);
+            z-index: 200;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .admin-box {
+            background: #2b170f;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .admin-box input, .admin-box textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 18px 0;
+            background: #1a0f0a;
+            border: 1px solid #3d2216;
+            color: white;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        .hidden { display: none !important; }
+        
+        .lista-admin-itens {
+            margin-top: 20px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        .item-admin-lista {
+            display: flex;
+            justify-content: space-between;
+            background: #1a0f0a;
+            padding: 8px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- --- INTERFACE DA LOJA --- -->
+    <header>
+        <div class="logo" onclick="location.reload()">?? Chocolates Bean to Bar</div>
+        <div>
+            <button onclick="abrirAdmin()" style="background: #3d2216; margin-right: 10px;">?? Admin</button>
+            <button onclick="toggleCarrinho()">?? Carrinho (<span id="cart-count">0</span>)</button>
+        </div>
+    </header>
+
+    <div id="canvas-container">
+        <div class="instrucoes">Arraste para girar a barra em 3D</div>
+    </div>
+
+    <div id="detalhes-produto">
+        <h2 id="prod-nome">Carregando chocolates...</h2>
+        <p id="prod-desc">Nossa vitrine 3D está sendo preparada.</p>
+        <p class="preco" id="prod-preco">R$ 0,00</p>
+        <button onclick="adicionarAoCarrinho()">Adicionar ao Carrinho</button>
+        
+        <div class="navegacao">
+            <button class="btn-nav" onclick="mudarProduto(-1)">? Anterior</button>
+            <button class="btn-nav" onclick="mudarProduto(1)">Próximo ?</button>
+        </div>
+    </div>
+
+    <!-- Carrinho Lateral -->
+    <div id="carrinho-lateral" class="fechado">
+        <h3>Seu Carrinho</h3>
+        <div id="itens-carrinho"></div>
+        <div class="total-carrinho">Total: <span id="cart-total">R$ 0,00</span></div>
+        <button class="btn-checkout" onclick="finalizarCompra()">Pagar com Mercado Pago</button>
+        <button class="btn-fechar" onclick="toggleCarrinho()">Fechar Carrinho</button>
+    </div>
+
+    <!-- --- PAINEL ADMINISTRATIVO (MODAL) --- -->
+    <div id="admin-modal" class="hidden">
+        <!-- Tela de Login do Admin -->
+        <div id="admin-login" class="admin-box">
+            <h2>Acesso Restrito</h2>
+            <label>E-mail do Admin</label>
+            <input type="email" id="admin-email" placeholder="seu-email@exemplo.com">
+            <label>Senha</label>
+            <input type="password" id="admin-password" placeholder="Sua senha do Supabase">
+            <button onclick="realizarLogin()" style="width: 100%;">Entrar</button>
+            <button onclick="fecharAdmin()" style="width: 100%; background: #7f8c8d; margin-top: 10px;">Cancelar</button>
+        </div>
+
+        <!-- Painel de Cadastro (Apenas após login bem-sucedido) -->
+        <div id="admin-painel" class="admin-box hidden">
+            <h2>Painel de Controle</h2>
+            <div style="font-size: 0.85em; color: #2ecc71; margin-bottom: 15px;">? Conectado ao Supabase</div>
+            
+            <label>Nome do Chocolate</label>
+            <input type="text" id="form-nome" placeholder="Ex: Chocolate 70% Cacau Selvagem">
+            
+            <label>Descrição / Origem</label>
+            <textarea id="form-desc" rows="3" placeholder="Ex: Produzido com cacau nativo da Amazônia..."></textarea>
+            
+            <label>Preço (R$)</label>
+            <input type="number" id="form-preco" step="0.01" placeholder="39.90">
+            
+            <label>Link de Pagamento do Mercado Pago</label>
+            <input type="url" id="form-link" placeholder="https://link.mercadopago.com.br/...">
+            
+            <label>Foto da Embalagem (JPEG, BMP, PNG)</label>
+            <input type="file" id="form-file" accept="image/*">
+            
+            <button onclick="salvarProduto()" style="width: 100%; background: #2ecc71;">Salvar Chocolate</button>
+            
+            <h3>Chocolates Cadastrados</h3>
+            <div id="admin-lista-produtos" class="lista-admin-itens"></div>
+
+            <button onclick="realizarLogout()" style="width: 100%; background: #c0392b; margin-top: 25px;">Sair do Admin</button>
+            <button onclick="fecharAdmin()" style="width: 100%; background: #7f8c8d; margin-top: 10px;">Fechar Painel</button>
+        </div>
+    </div>
+
+    <!-- --- CÓDIGO DE FUNCIONAMENTO (JAVASCRIPT) --- -->
+    <script>
+        // 1. CONFIGURAÇÃO DO SUPABASE
+        // IMPORTANTE: Substitua os dados abaixo com as chaves do seu projeto Supabase
+        const SUPABASE_URL = "SUA_SUPABASE_URL_AQUI";
+        const SUPABASE_ANON_KEY = "SUA_SUPABASE_ANON_KEY_AQUI";
+        
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // 2. VARIÁVEIS GLOBAIS DO SISTEMA
+        let cena, camera, renderizador, chocolate3D;
+        let listaProdutos = [];
+        let indiceAtual = 0;
+        let carrinho = [];
+
+        // 3. MOTOR 3D (THREE.JS)
+        function inicializar3D() {
+            const container = document.getElementById('canvas-container');
+            
+            cena = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
+            camera.position.z = 7;
+
+            renderizador = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderizador.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderizador.domElement);
+
+            // Iluminação realista para destacar a embalagem
+            const luzAmbiente = new THREE.AmbientLight(0xffffff, 0.8);
+            cena.add(luzAmbiente);
+
+            const luzDirecional = new THREE.DirectionalLight(0xffffff, 0.6);
+            luzDirecional.position.set(5, 5, 5);
+            cena.add(luzDirecional);
+
+            // Geometria da barra de chocolate (proporção clássica de barra de chocolate)
+            const geometria = new THREE.BoxGeometry(3.2, 1.8, 0.25);
+            const materialChocolate = new THREE.MeshStandardMaterial({ color: 0x2b130a, roughness: 0.6 });
+
+            // Array de materiais para aplicar a imagem apenas na face frontal (índice 4)
+            const materiais = [
+                materialChocolate, // Direita
+                materialChocolate, // Esquerda
+                materialChocolate, // Cima
+                materialChocolate, // Baixo
+                materialChocolate, // Frente (onde a foto do produto será projetada)
+                materialChocolate  // Trás
+            ];
+
+            chocolate3D = new THREE.Mesh(geometria, materiais);
+            cena.add(chocolate3D);
+
+            // Controle de rotação com o mouse/toque
+            let arrastando = false;
+            let mouseAnterior = { x: 0, y: 0 };
+
+            container.addEventListener('mousedown', () => arrastando = true);
+            container.addEventListener('touchstart', () => arrastando = true);
+            
+            window.addEventListener('mouseup', () => arrastando = false);
+            window.addEventListener('touchend', () => arrastando = false);
+
+            container.addEventListener('mousemove', (e) => rotacionarChocolate(e.clientX, e.clientY));
+            container.addEventListener('touchmove', (e) => {
+                if(e.touches.length > 0) {
+                    rotacionarChocolate(e.touches[0].clientX, e.touches[0].clientY);
+                }
+            });
+
+            function rotacionarChocolate(clientX, clientY) {
+                if (arrastando) {
+                    const deltaX = clientX - mouseAnterior.x;
+                    const deltaY = clientY - mouseAnterior.y;
+                    chocolate3D.rotation.y += deltaX * 0.01;
+                    chocolate3D.rotation.x += deltaY * 0.01;
+                }
+                mouseAnterior = { x: clientX, y: clientY };
+            }
+
+            animar();
+        }
+
+        function animar() {
+            requestAnimationFrame(animar);
+            // Rotação automática bem suave para dar vida ao produto
+            chocolate3D.rotation.y += 0.003;
+            renderizador.render(cena, camera);
+        }
+
+        // 4. INTEGRAÇÃO E CARREGAMENTO DOS DADOS DO SUPABASE
+        async function carregarProdutosDoBanco() {
+            const { data, error } = await supabase
+                .from('produtos')
+                .select('*')
+                .order('created_at', { ascending: true });
+
+            if (error) {
+                console.error("Erro ao carregar produtos:", error);
+                return;
+            }
+
+            listaProdutos = data;
+            if (listaProdutos.length > 0) {
+                mostrarProduto(0);
+            } else {
+                document.getElementById('prod-nome').innerText = "Nenhum chocolate cadastrado";
+                document.getElementById('prod-desc').innerText = "Acesse o painel administrativo para cadastrar seus chocolates.";
+            }
+        }
+
+        function mostrarProduto(indice) {
+            if (listaProdutos.length === 0) return;
+            indiceAtual = indice;
+            const produto = listaProdutos[indice];
+
+            document.getElementById('prod-nome').innerText = produto.nome;
+            document.getElementById('prod-desc').innerText = produto.descricao;
+            document.getElementById('prod-preco').innerText = `R$ ${parseFloat(produto.preco).toFixed(2)}`;
+
+            // Carrega a imagem cadastrada no Supabase diretamente na face frontal do chocolate 3D
+            const loader = new THREE.TextureLoader();
+            loader.load(produto.imagem_url, (textura) => {
+                chocolate3D.material[4] = new THREE.MeshStandardMaterial({ map: textura, roughness: 0.3 });
+            });
+        }
+
+        function mudarProduto(direcao) {
+            let novoIndice = indiceAtual + direcao;
+            if (novoIndice >= listaProdutos.length) novoIndice = 0;
+            if (novoIndice < 0) novoIndice = listaProdutos.length - 1;
+            mostrarProduto(novoIndice);
+        }
+
+        // 5. SISTEMA DO CARRINHO DE COMPRAS E MERCADO PAGO
+        function toggleCarrinho() {
+            document.getElementById('carrinho-lateral').classList.toggle('fechado');
+        }
+
+        function adicionarAoCarrinho() {
+            if (listaProdutos.length === 0) return;
+            const produto = listaProdutos[indiceAtual];
+            carrinho.push(produto);
+            atualizarVisualCarrinho();
+            
+            // Abre o carrinho automaticamente ao adicionar
+            document.getElementById('carrinho-lateral').classList.remove('fechado');
+        }
+
+        function removerDoCarrinho(index) {
+            carrinho.splice(index, 1);
+            atualizarVisualCarrinho();
+        }
+
+        function atualizarVisualCarrinho() {
+            document.getElementById('cart-count').innerText = carrinho.length;
+            const container = document.getElementById('itens-carrinho');
+            container.innerHTML = '';
+            
+            let total = 0;
+            carrinho.forEach((item, index) => {
+                total += parseFloat(item.preco);
+                container.innerHTML += `
+                    <div class="item-cart">
+                        <span>${item.nome} - R$ ${parseFloat(item.preco).toFixed(2)}</span>
+                        <button onclick="removerDoCarrinho(${index})" style="background: #c0392b; padding: 5px 10px;">X</button>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('cart-total').innerText = `R$ ${total.toFixed(2)}`;
+        }
+
+        function finalizarCompra() {
+            if (carrinho.length === 0) {
+                alert("Seu carrinho está vazio!");
+                return;
+            }
+            // Redireciona para o link do Mercado Pago do primeiro item adicionado
+            const primeiroItem = carrinho[0];
+            alert(`Você será redirecionado para o ambiente seguro de pagamento do Mercado Pago para adquirir: ${primeiroItem.nome}`);
+            window.location.href = primeiroItem.link_mercado_pago;
+        }
+
+        // 6. PAINEL ADMINISTRATIVO (LOGIN E CADASTRO)
+        function abrirAdmin() {
+            document.getElementById('admin-modal').classList.remove('hidden');
+            verificarSessaoAtiva();
+        }
+
+        function fecharAdmin() {
+            document.getElementById('admin-modal').classList.add('hidden');
+        }
+
+        async function verificarSessaoAtiva() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                mostrarPainelAdmin();
+            } else {
+                mostrarLoginAdmin();
+            }
+        }
+
+        function mostrarLoginAdmin() {
+            document.getElementById('admin-login').classList.remove('hidden');
+            document.getElementById('admin-painel').classList.add('hidden');
+        }
+
+        function mostrarPainelAdmin() {
+            document.getElementById('admin-login').classList.add('hidden');
+            document.getElementById('admin-painel').classList.remove('hidden');
+            listarProdutosNoPainel();
+        }
+
+        async function realizarLogin() {
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+
+            const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+            if (error) {
+                alert("Erro ao entrar: " + error.message);
+            } else {
+                mostrarPainelAdmin();
+            }
+        }
+
+        async function realizarLogout() {
+            await supabase.auth.signOut();
+            mostrarLoginAdmin();
+            location.reload();
+        }
+
+        // Cadastrar novo chocolate no Supabase (com upload de foto)
+        async function salvarProduto() {
+            const nome = document.getElementById('form-nome').value;
+            const descricao = document.getElementById('form-desc').value;
+            const preco = parseFloat(document.getElementById('form-preco').value);
+            const link_mercado_pago = document.getElementById('form-link').value;
+            const fileInput = document.getElementById('form-file');
+
+            if (!nome || !descricao || !preco || !link_mercado_pago || fileInput.files.length === 0) {
+                alert("Por favor, preencha todos os campos e selecione uma foto.");
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Date.now()}.${fileExt}`;
+            const filePath = `chocolates/${fileName}`;
+
+            // 1. Fazer upload da imagem para o Storage do Supabase
+            const { error: uploadError } = await supabase.storage
+                .from('embalagens')
+                .upload(filePath, file);
+
+            if (uploadError) {
+                alert("Erro ao subir imagem: " + uploadError.message);
+                return;
+            }
+
+            // Obter a URL pública da imagem que foi salva
+            const { data: { publicUrl } } = supabase.storage
+                .from('embalagens')
+                .getPublicUrl(filePath);
+
+            // 2. Salvar os dados do produto na tabela
+            const { error: insertError } = await supabase
+                .from('produtos')
+                .insert([{ nome, descricao, preco, link_mercado_pago, imagem_url: publicUrl }]);
+
+            if (insertError) {
+                alert("Erro ao salvar dados do produto: " + insertError.message);
+            } else {
+                alert("Chocolate cadastrado com sucesso!");
+                // Limpa o formulário
+                document.getElementById('form-nome').value = '';
+                document.getElementById('form-desc').value = '';
+                document.getElementById('form-preco').value = '';
+                document.getElementById('form-link').value = '';
+                fileInput.value = '';
+                
+                listarProdutosNoPainel();
+                carregarProdutosDoBanco();
+            }
+        }
+
+        async function listarProdutosNoPainel() {
+            const { data, error } = await supabase.from('produtos').select('*').order('created_at', { ascending: true });
+            const container = document.getElementById('admin-lista-produtos');
+            container.innerHTML = '';
+            
+            if (data) {
+                data.forEach(p => {
+                    container.innerHTML += `
+                        <div class="item-admin-lista">
+                            <span>${p.nome} - R$ ${parseFloat(p.preco).toFixed(2)}</span>
+                            <button onclick="deletarProduto('${p.id}')" style="background: #c0392b; padding: 3px 8px; font-size: 0.8em;">Excluir</button>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        async function deletarProduto(id) {
+            if (confirm("Deseja realmente remover este chocolate?")) {
+                const { error } = await supabase.from('produtos').delete().eq('id', id);
+                if (error) {
+                    alert("Erro ao deletar: " + error.message);
+                } else {
+                    listarProdutosNoPainel();
+                    carregarProdutosDoBanco();
+                }
+            }
+        }
+
+        // 7. INICIALIZAÇÃO AUTOMÁTICA AO CARREGAR A PÁGINA
+        window.onload = () => {
+            inicializar3D();
+            carregarProdutosDoBanco();
+        };
+    </script>
+</body>
+</html>
