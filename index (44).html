@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FullForge — Automação que trabalha por você</title>
+<meta name="description" content="Agência full stack de automação digital. Do site ao atendimento com IA. Plano anual sem taxa de setup.">
+<meta property="og:title" content="FullForge — Automação que trabalha por você">
+<meta property="og:description" content="Agência full stack de automação digital. Do site ao atendimento com IA. Plano anual sem taxa de setup.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:#0A0A0F;color:#FFFFFF;line-height:1.6;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;outline:none}
+input,select,textarea{font-family:inherit;border:none;outline:none}
+img{max-width:100%;display:block}
+
+.container{width:100%;max-width:1200px;margin:0 auto;padding:0 24px}
+
+/* Header */
+.header{position:fixed;top:0;left:0;width:100%;z-index:1000;background:rgba(10,10,15,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.06);transition:background 0.3s}
+.header-inner{display:flex;align-items:center;justify-content:space-between;height:72px}
+.logo{font-weight:800;font-size:1.25rem;color:#FFFFFF;display:flex;align-items:center;gap:6px}
+.logo span{color:#2563EB}
+.nav-desktop{display:flex;align-items:center;gap:32px}
+.nav-desktop a{font-size:0.9rem;color:#94A3B8;transition:color 0.2s}
+.nav-desktop a:hover{color:#FFFFFF}
+.btn-gradient{background:linear-gradient(135deg,#2563EB,#06B6D4);color:#FFFFFF;font-weight:600;font-size:0.85rem;padding:10px 20px;border-radius:8px;transition:opacity 0.2s,transform 0.2s}
+.btn-gradient:hover{opacity:0.9;transform:translateY(-1px)}
+.btn-secondary{background:transparent;color:#FFFFFF;font-weight:600;font-size:0.95rem;padding:14px 28px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);transition:border-color 0.2s,transform 0.2s}
+.btn-secondary:hover{border-color:#FFFFFF;transform:translateY(-1px)}
+.btn-large{padding:16px 32px;font-size:1rem}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
+.hamburger span{display:block;width:24px;height:2px;background:#FFFFFF;border-radius:2px;transition:all 0.3s}
+.nav-mobile{display:none;position:absolute;top:72px;left:0;width:100%;background:rgba(10,10,15,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.06);padding:24px;flex-direction:column;gap:20px}
+.nav-mobile a{font-size:1rem;color:#94A3B8}
+.nav-mobile .btn-gradient{text-align:center}
+
+/* Pill tag */
+.pill{display:inline-flex;align-items:center;gap:6px;background:rgba(37,99,235,0.15);border:1px solid rgba(37,99,235,0.3);color:#2563EB;font-size:13px;font-weight:600;padding:6px 16px;border-radius:999px;margin-bottom:20px}
+
+/* Sections general */
+.section{padding:100px 0}
+.section-alt{background:#0D0D14}
+.section-title{font-size:clamp(2rem,4vw,2.8rem);font-weight:800;line-height:1.15;text-align:center}
+.section-subtitle{color:#94A3B8;font-size:1.1rem;text-align:center;max-width:600px;margin:16px auto 0}
+
+/* Hero */
+.hero{min-height:100vh;display:flex;align-items:center;padding-top:80px;position:relative;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(37,99,235,0.08) 0%,transparent 70%)}
+.hero-inner{text-align:center;max-width:800px;margin:0 auto}
+.hero h1{font-size:clamp(2.8rem,6vw,5rem);font-weight:800;line-height:1.1}
+.gradient-text{background:linear-gradient(135deg,#2563EB,#06B6D4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{color:#94A3B8;font-size:1.2rem;max-width:560px;margin:24px auto 0}
+.hero-buttons{display:flex;justify-content:center;gap:16px;margin-top:40px;flex-wrap:wrap}
+.proof{margin-top:64px}
+.proof p{color:#64748B;font-size:0.85rem;margin-bottom:12px}
+.proof-logos{color:#475569;font-weight:700;letter-spacing:2px;text-transform:uppercase;font-size:12px}
+
+/* Metrics */
+.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;text-align:center}
+.metric-num{font-size:3rem;font-weight:800;background:linear-gradient(135deg,#2563EB,#06B6D4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.metric-label{font-size:0.85rem;color:#64748B;margin-top:4px}
+
+/* Como funciona */
+.steps{display:flex;align-items:flex-start;justify-content:center;gap:24px;margin-top:60px;flex-wrap:wrap}
+.step-card{flex:1;min-width:260px;max-width:340px;background:#111118;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:40px 28px;position:relative;overflow:hidden;transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s}
+.step-card:hover{border-color:rgba(37,99,235,0.4);transform:translateY(-4px);box-shadow:0 4px 24px rgba(37,99,235,0.10)}
+.step-num{position:absolute;top:12px;left:20px;font-size:4rem;font-weight:800;color:rgba(37,99,235,0.15);line-height:1;z-index:0}
+.step-content{position:relative;z-index:1}
+.step-content h3{font-size:1.15rem;font-weight:700;margin-bottom:10px}
+.step-content p{color:#94A3B8;font-size:0.95rem}
+.step-arrow{display:flex;align-items:center;justify-content:center;color:#2563EB;font-size:1.5rem;font-weight:700;align-self:center}
+
+/* Serviços */
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+.service-card{background:#111118;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:32px;transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s;display:flex;flex-direction:column}
+.service-card:hover{border-color:rgba(37,99,235,0.4);transform:translateY(-4px);box-shadow:0 4px 24px rgba(37,99,235,0.10)}
+.service-emoji{font-size:2rem;margin-bottom:12px}
+.service-card h3{font-size:1.1rem;font-weight:700;margin-bottom:8px}
+.service-card p{color:#94A3B8;font-size:0.9rem;margin-bottom:16px;flex:1}
+.service-price{font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,#2563EB,#06B6D4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.service-meta{color:#64748B;font-size:0.8rem;margin-top:4px;margin-bottom:20px}
+.service-btn{width:100%;background:linear-gradient(135deg,#2563EB,#06B6D4);color:#FFFFFF;font-weight:600;font-size:0.9rem;padding:12px;border-radius:8px;transition:opacity 0.2s}
+.service-btn:hover{opacity:0.9}
+.service-full{grid-column:1/-1;border:2px solid transparent;background:linear-gradient(#111118,#111118) padding-box,linear-gradient(135deg,#2563EB,#06B6D4) border-box;background-color:rgba(37,99,235,0.06);display:flex;flex-direction:row;align-items:center;gap:40px;padding:40px}
+.service-full .service-emoji{font-size:2.5rem}
+.service-full .service-info{flex:1}
+.service-full .service-price-area{text-align:right}
+
+/* Preços */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px;align-items:start}
+.pricing-card{background:#111118;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:40px 32px;transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s;position:relative}
+.pricing-card:hover{border-color:rgba(37,99,235,0.4);transform:translateY(-4px);box-shadow:0 4px 24px rgba(37,99,235,0.10)}
+.pricing-card.popular{transform:scale(1.04);border:2px solid transparent;background:linear-gradient(#111118,#111118) padding-box,linear-gradient(135deg,#2563EB,#06B6D4) border-box;z-index:2}
+.pricing-card.popular:hover{transform:scale(1.04) translateY(-4px)}
+.popular-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#2563EB,#06B6D4);color:#FFFFFF;font-size:0.7rem;font-weight:700;padding:4px 14px;border-radius:999px;text-transform:uppercase;letter-spacing:1px}
+.pricing-card h3{font-size:1.1rem;font-weight:700;margin-bottom:4px}
+.pricing-card .plan-desc{color:#94A3B8;font-size:0.85rem;margin-bottom:20px}
+.pricing-card .plan-price{font-size:1.8rem;font-weight:800;background:linear-gradient(135deg,#2563EB,#06B6D4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:24px}
+.pricing-card ul{list-style:none;margin-bottom:28px}
+.pricing-card ul li{color:#94A3B8;font-size:0.9rem;margin-bottom:10px;display:flex;align-items:flex-start;gap:8px}
+.pricing-card ul li::before{content:"✓";color:#2563EB;font-weight:700;flex-shrink:0}
+.pricing-footer{text-align:center;color:#64748B;font-size:0.85rem;margin-top:40px;max-width:700px;margin-left:auto;margin-right:auto}
+
+/* Cases */
+.case-card{background:#111118;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:48px;display:flex;gap:48px;align-items:center;margin-top:48px}
+.case-info{flex:1}
+.case-info h3{font-size:1.5rem;font-weight:700;margin-bottom:4px}
+.case-info .case-tag{color:#64748B;font-size:0.9rem;margin-bottom:20px}
+.case-block{margin-bottom:16px}
+.case-block strong{color:#FFFFFF;font-size:0.9rem;display:block;margin-bottom:4px}
+.case-block p{color:#94A3B8;font-size:0.9rem}
+.case-pills{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.case-pill{background:rgba(37,99,235,0.15);border:1px solid rgba(37,99,235,0.3);color:#2563EB;font-size:0.8rem;font-weight:600;padding:6px 14px;border-radius:999px}
+.case-cta{margin-top:32px;text-align:center}
+.case-cta a{color:#2563EB;font-weight:600;cursor:pointer}
+.case-cta a:hover{text-decoration:underline}
+
+/* Timeline */
+.timeline{display:flex;justify-content:space-between;position:relative;margin-top:60px;gap:20px}
+.timeline::before{content:"";position:absolute;top:16px;left:0;right:0;height:2px;background:linear-gradient(90deg,#2563EB,#06B6D4);z-index:0}
+.timeline-item{flex:1;text-align:center;position:relative;z-index:1;min-width:140px}
+.timeline-dot{width:12px;height:12px;background:#0D0D14;border:2px solid #2563EB;border-radius:50%;margin:0 auto 16px;position:relative}
+.timeline-dot.active{width:16px;height:16px;border-color:#06B6D4;background:#06B6D4;top:-2px}
+.timeline-item h4{font-size:0.85rem;font-weight:700;margin-bottom:6px}
+.timeline-item p{color:#94A3B8;font-size:0.8rem}
+.badge-cyan{display:inline-block;background:rgba(6,182,212,0.15);border:1px solid rgba(6,182,212,0.3);color:#06B6D4;font-size:0.65rem;font-weight:700;padding:2px 8px;border-radius:999px;margin-left:6px;vertical-align:middle}
+
+/* Contato */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-top:48px;align-items:start}
+.contact-form{display:flex;flex-direction:column;gap:16px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group label{font-size:0.85rem;color:#94A3B8;font-weight:500}
+.form-group input,.form-group select,.form-group textarea{background:#111118;border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px 16px;color:#FFFFFF;font-size:0.95rem;transition:border-color 0.2s,background 0.2s}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#2563EB;background:rgba(37,99,235,0.05)}
+.form-group textarea{resize:vertical;min-height:100px}
+.contact-bullets{display:flex;flex-direction:column;gap:20px;justify-content:center;height:100%}
+.contact-bullets li{list-style:none;color:#94A3B8;font-size:1rem;display:flex;align-items:center;gap:12px}
+.contact-bullets li::before{content:"✓";color:#2563EB;font-weight:700;font-size:1.2rem}
+.form-success{display:none;text-align:center;padding:40px 20px}
+.form-success h3{font-size:1.3rem;font-weight:700;margin-bottom:8px}
+.form-success p{color:#94A3B8}
+
+/* Footer */
+.footer{border-top:1px solid rgba(255,255,255,0.06);padding:48px 0 32px}
+.footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px}
+.footer-links{display:flex;gap:24px}
+.footer-links a{color:#94A3B8;font-size:0.9rem;transition:color 0.2s}
+.footer-links a:hover{color:#FFFFFF}
+.footer-socials{display:flex;gap:16px}
+.footer-socials a{color:#94A3B8;font-size:0.9rem;transition:color 0.2s}
+.footer-socials a:hover{color:#FFFFFF}
+.footer-copy{color:#475569;font-size:0.8rem;text-align:center;margin-top:24px;width:100%}
+
+/* Modal */
+.modal{display:none;position:fixed;inset:0;z-index:2000;align-items:center;justify-content:center;padding:20px}
+.modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px)}
+.modal-card{position:relative;background:#111118;border-radius:16px;border:1px solid rgba(255,255,255,0.08);max-width:520px;width:100%;max-height:90vh;overflow-y:auto;padding:40px;z-index:1}
+.modal-close{position:absolute;top:16px;right:20px;background:none;border:none;color:#94A3B8;font-size:1.5rem;cursor:pointer;transition:color 0.2s}
+.modal-close:hover{color:#FFFFFF}
+.modal-card h2{font-size:1.4rem;font-weight:700;margin-bottom:4px}
+.modal-card>p{color:#94A3B8;font-size:0.9rem;margin-bottom:24px}
+
+/* Animations */
+@keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.animate-on-scroll{opacity:0}
+.animate-on-scroll.visible{animation:fadeInUp 0.5s ease forwards}
+
+/* Responsive */
+@media(max-width:768px){
+.section{padding:60px 0}
+.nav-desktop{display:none}
+.hamburger{display:flex}
+.metrics-grid{grid-template-columns:repeat(2,1fr);gap:32px 20px}
+.steps{flex-direction:column;align-items:center}
+.step-arrow{display:none}
+.services-grid{grid-template-columns:1fr}
+.service-full{flex-direction:column;text-align:center}
+.service-full .service-price-area{text-align:center}
+.pricing-grid{grid-template-columns:1fr}
+.pricing-card.popular{transform:none}
+.pricing-card.popular:hover{transform:translateY(-4px)}
+.case-card{flex-direction:column;padding:32px}
+.contact-grid{grid-template-columns:1fr;gap:40px}
+.timeline{flex-direction:column;gap:32px}
+.timeline::before{left:7px;top:0;bottom:0;width:2px;height:auto;background:linear-gradient(180deg,#2563EB,#06B6D4)}
+.timeline-item{text-align:left;padding-left:32px}
+.timeline-dot{margin:0;position:absolute;left:0;top:2px}
+.timeline-dot.active{top:0}
+.footer-inner{flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header" id="header">
+<div class="container header-inner">
+<a href="#inicio" class="logo"><span>⚡</span>FullForge</a>
+<nav class="nav-desktop">
+<a href="#servicos">Serviços</a>
+<a href="#precos">Preços</a>
+<a href="#cases">Cases</a>
+<a href="#contato">Contato</a>
+<button class="btn-gradient" onclick="openModal()">Começar agora</button>
+</nav>
+<button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+<span></span><span></span><span></span>
+</button>
+</div>
+<nav class="nav-mobile" id="navMobile">
+<a href="#servicos" onclick="toggleMenu()">Serviços</a>
+<a href="#precos" onclick="toggleMenu()">Preços</a>
+<a href="#cases" onclick="toggleMenu()">Cases</a>
+<a href="#contato" onclick="toggleMenu()">Contato</a>
+<button class="btn-gradient" onclick="toggleMenu();openModal()">Começar agora</button>
+</nav>
+</header>
+
+<!-- Hero -->
+<section class="hero" id="inicio">
+<div class="container hero-inner">
+<span class="pill">⚡ Automação Inteligente</span>
+<h1>Automação que <span class="gradient-text">trabalha</span> por você.</h1>
+<p class="hero-sub">Do site ao atendimento com IA. Plano anual sem taxa de setup. Sua empresa no piloto automático em até 7 dias.</p>
+<div class="hero-buttons">
+<button class="btn-gradient btn-large" onclick="openModal()">Solicitar diagnóstico gratuito</button>
+<a href="#como-funciona" class="btn-secondary btn-large">Ver como funciona</a>
+</div>
+<div class="proof">
+<p>Empresas que já automatizaram com a FullForge</p>
+<div class="proof-logos">LEGISALIMENTOS · SETOR ALIMENTAR · SETOR SAÚDE · VAREJO · SERVIÇOS</div>
+</div>
+</div>
+</section>
+
+<!-- Métricas -->
+<section class="section section-alt">
+<div class="container">
+<div class="metrics-grid">
+<div class="animate-on-scroll">
+<div class="metric-num">24h</div>
+<div class="metric-label">Atendimento ativo por dia</div>
+</div>
+<div class="animate-on-scroll">
+<div class="metric-num">7 dias</div>
+<div class="metric-label">Para entrar no ar</div>
+</div>
+<div class="animate-on-scroll">
+<div class="metric-num">R$ 0</div>
+<div class="metric-label">Taxa de setup</div>
+</div>
+<div class="animate-on-scroll">
+<div class="metric-num">100%</div>
+<div class="metric-label">Operação automática</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Como funciona -->
+<section class="section" id="como-funciona">
+<div class="container" style="text-align:center">
+<span class="pill">Como funciona</span>
+<h2 class="section-title">Simples assim.</h2>
+<p class="section-subtitle">Três passos. Sem burocracia.</p>
+<div class="steps">
+<div class="step-card animate-on-scroll">
+<div class="step-num">01</div>
+<div class="step-content">
+<h3>Diagnóstico gratuito</h3>
+<p>Você nos conta o processo. A gente mapeia onde a automação gera mais resultado.</p>
+</div>
+</div>
+<div class="step-arrow animate-on-scroll">→</div>
+<div class="step-card animate-on-scroll">
+<div class="step-num">02</div>
+<div class="step-content">
+<h3>Implantação em 7 dias</h3>
+<p>Construímos e ativamos tudo. Você acompanha em tempo real.</p>
+</div>
+</div>
+<div class="step-arrow animate-on-scroll">→</div>
+<div class="step-card animate-on-scroll">
+<div class="step-num">03</div>
+<div class="step-content">
+<h3>Operação contínua</h3>
+<p>Tudo roda 24h por dia, 7 dias por semana. Sem intervenção manual.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Serviços -->
+<section class="section section-alt" id="servicos">
+<div class="container" style="text-align:center">
+<span class="pill">Serviços</span>
+<h2 class="section-title">Automação para cada parte do seu negócio.</h2>
+<p class="section-subtitle">Plano anual parcelado em 12x no cartão — sem taxa de setup.</p>
+<div class="services-grid">
+<div class="service-card animate-on-scroll">
+<div class="service-emoji">📸</div>
+<h3>Instagram Automático</h3>
+<p>Post diário com IA — legenda, hashtags e publicação automática no seu perfil.</p>
+<div class="service-price">12x de R$ 37,50/mês</div>
+<div class="service-meta">Plano anual · Sem setup · Cancele quando quiser</div>
+<button class="service-btn" onclick="openModal('Instagram Automático')">Quero este</button>
+</div>
+<div class="service-card animate-on-scroll">
+<div class="service-emoji">🛒</div>
+<h3>Checkout + Entrega Digital</h3>
+<p>Checkout integrado e entrega automática por e-mail em segundos após o pagamento.</p>
+<div class="service-price">12x de R$ 12,25/mês</div>
+<div class="service-meta">Plano anual · Sem setup · Cancele quando quiser</div>
+<button class="service-btn" onclick="openModal('Checkout e Entrega Digital')">Quero este</button>
+</div>
+<div class="service-card animate-on-scroll">
+<div class="service-emoji">🔍</div>
+<h3>SEO Automatizado</h3>
+<p>Artigos otimizados para o Google criados por IA e publicados automaticamente no seu site.</p>
+<div class="service-price">12x de R$ 33,08/mês</div>
+<div class="service-meta">Plano anual · Sem setup · Cancele quando quiser</div>
+<button class="service-btn" onclick="openModal('SEO Automatizado')">Quero este</button>
+</div>
+<div class="service-card animate-on-scroll">
+<div class="service-emoji">🤖</div>
+<h3>Atendimento WhatsApp IA</h3>
+<p>IA responde seus clientes 24h pelo WhatsApp. Nunca mais perca uma venda por demora.</p>
+<div class="service-price">12x de R$ 41,42/mês</div>
+<div class="service-meta">Plano anual · Sem setup · Cancele quando quiser</div>
+<button class="service-btn" onclick="openModal('Atendimento WhatsApp IA')">Quero este</button>
+</div>
+<div class="service-card animate-on-scroll">
+<div class="service-emoji">🎯</div>
+<h3>Funil de Vendas com IA</h3>
+<p>Captura, qualifica, proposta personalizada e follow-up automático. Vendas enquanto você dorme.</p>
+<div class="service-price">12x de R$ 49,75/mês</div>
+<div class="service-meta">Plano anual · Sem setup · Cancele quando quiser</div>
+<button class="service-btn" onclick="openModal('Funil de Vendas IA')">Quero este</button>
+</div>
+<div class="service-card animate-on-scroll">
+<div class="service-emoji">🌐</div>
+<h3>Site & E-commerce Inteligente</h3>
+<p>Site ou loja virtual completa com checkout, CRM e entrega digital — integrado a todas as automações FullForge.</p>
+<div class="service-price">12x de R$ 24,75/mês</div>
+<div class="service-meta">Plano anual · Sem setup · Cancele quando quiser</div>
+<button class="service-btn" onclick="openModal('Site e E-commerce')">Quero este</button>
+</div>
+<div class="service-card service-full animate-on-scroll">
+<div class="service-emoji">⭐</div>
+<div class="service-info">
+<h3>Pacote Completo</h3>
+<p>Os 6 serviços operando juntos. Site, loja, atendimento, SEO, funil e Instagram. Um ecossistema completo.</p>
+</div>
+<div class="service-price-area">
+<div class="service-price">12x de R$ 149,75/mês</div>
+<div class="service-meta">Plano anual · Sem setup · Economia vs. contratar separado</div>
+<button class="service-btn" style="margin-top:12px" onclick="openModal('Pacote Completo')">Quero o pacote completo</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Preços -->
+<section class="section section-alt" id="precos">
+<div class="container" style="text-align:center">
+<span class="pill">Planos e Preços</span>
+<h2 class="section-title">Simples. Transparente. Sem surpresas.</h2>
+<p class="section-subtitle">Plano anual parcelado em 12x. Sem setup. Sem fidelidade.</p>
+<div class="pricing-grid">
+<div class="pricing-card animate-on-scroll">
+<h3>Plano 1 — Instagram Automático</h3>
+<p class="plan-desc">Presença diária nas redes</p>
+<div class="plan-price">12x de R$ 37,50/mês</div>
+<ul>
+<li>Post diário com IA</li>
+<li>Legendas otimizadas</li>
+<li>Calendário automático</li>
+<li>Relatório mensal</li>
+<li>Suporte</li>
+</ul>
+<button class="service-btn" onclick="openModal('Instagram Automático')">Contratar</button>
+</div>
+<div class="pricing-card popular animate-on-scroll">
+<div class="popular-badge">Mais Popular</div>
+<h3>Plano 2 — SEO + Funil de Vendas</h3>
+<p class="plan-desc">Tráfego orgânico e vendas automáticas</p>
+<div class="plan-price">12x de R$ 83,33/mês</div>
+<ul>
+<li>4 artigos SEO/mês</li>
+<li>Publicação automática</li>
+<li>Captura de leads com IA</li>
+<li>Proposta personalizada</li>
+<li>Follow-up</li>
+<li>Relatório</li>
+</ul>
+<button class="service-btn" onclick="openModal('SEO + Funil de Vendas')">Contratar</button>
+</div>
+<div class="pricing-card animate-on-scroll">
+<h3>Plano 3 — Pacote FullForge</h3>
+<p class="plan-desc">Toda automação em um só lugar</p>
+<div class="plan-price">12x de R$ 120,83/mês</div>
+<ul>
+<li>Instagram</li>
+<li>Checkout</li>
+<li>SEO (8 artigos)</li>
+<li>WhatsApp IA</li>
+<li>Funil</li>
+<li>Site & E-commerce</li>
+<li>Dashboard</li>
+<li>Suporte prioritário</li>
+</ul>
+<button class="service-btn" onclick="openModal('Pacote Completo')">Contratar</button>
+</div>
+</div>
+<p class="pricing-footer">Todos os planos são anuais, parcelados em 12x no cartão, sem taxa de setup. Onboarding assistido e 30 dias de suporte pós-ativação inclusos.</p>
+</div>
+</section>
+
+<!-- Cases -->
+<section class="section" id="cases">
+<div class="container" style="text-align:center">
+<span class="pill">Cases</span>
+<h2 class="section-title">Resultado real. Operação real.</h2>
+<p class="section-subtitle">Veja o que acontece quando a automação assume o trabalho repetitivo.</p>
+<div class="case-card animate-on-scroll">
+<div class="case-info">
+<h3>LegisAlimentos</h3>
+<p class="case-tag">Consultoria de legislação alimentar</p>
+<div class="case-block">
+<strong>Desafio:</strong>
+<p>Publicar conteúdo diariamente e manter clientes informados — tudo manual, tudo lento.</p>
+</div>
+<div class="case-block">
+<strong>Solução:</strong>
+<p>Instagram diário com IA · Venda e entrega automática · SEO automatizado</p>
+</div>
+<div class="case-pills">
+<span class="case-pill">365 posts publicados/ano — zero intervenção manual</span>
+<span class="case-pill">Entrega de produto em menos de 30 segundos</span>
+<span class="case-pill">Conteúdo no ar todo dia sem contratar redator</span>
+</div>
+</div>
+</div>
+<div class="case-cta">
+<p>Em breve novos cases. <a onclick="openModal()">Quer ser o próximo?</a></p>
+</div>
+</div>
+</section>
+
+<!-- Evolução -->
+<section class="section section-alt">
+<div class="container" style="text-align:center">
+<span class="pill">Nossa jornada</span>
+<h2 class="section-title">Crescendo com nossos clientes.</h2>
+<div class="timeline">
+<div class="timeline-item animate-on-scroll">
+<div class="timeline-dot"></div>
+<h4>Jan 2026</h4>
+<p>FullForge fundada. Primeiro sistema de automação ativado.</p>
+</div>
+<div class="timeline-item animate-on-scroll">
+<div class="timeline-dot"></div>
+<h4>Mar 2026</h4>
+<p>Primeiro cliente automatizado. Instagram + SEO + Automações.</p>
+</div>
+<div class="timeline-item animate-on-scroll">
+<div class="timeline-dot"></div>
+<h4>Jun 2026</h4>
+<p>Funil de Vendas com IA lançado. Leads qualificados automaticamente.</p>
+</div>
+<div class="timeline-item animate-on-scroll">
+<div class="timeline-dot"></div>
+<h4>Ago 2026</h4>
+<p>Site & E-commerce Inteligente adicionado ao portfólio.</p>
+</div>
+<div class="timeline-item animate-on-scroll">
+<div class="timeline-dot active"></div>
+<h4>Em breve <span class="badge-cyan">EM BREVE</span></h4>
+<p>WhatsApp IA + Atendimento 24h para todos os planos.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Contato -->
+<section class="section" id="contato">
+<div class="container" style="text-align:center">
+<span class="pill">Contato</span>
+<h2 class="section-title">Vamos conversar sobre o seu projeto.</h2>
+<p class="section-subtitle">Diagnóstico gratuito. Resposta em até 24 horas.</p>
+<div class="contact-grid">
+<form class="contact-form" id="contactForm" onsubmit="handleSubmit(event,'contactForm','contactSuccess')">
+<div class="form-group">
+<label>Nome completo</label>
+<input type="text" name="nome" required placeholder="Seu nome">
+</div>
+<div class="form-group">
+<label>E-mail</label>
+<input type="email" name="email" required placeholder="seu@email.com">
+</div>
+<div class="form-group">
+<label>WhatsApp com DDD</label>
+<input type="tel" name="whatsapp" required placeholder="(11) 99999-9999">
+</div>
+<div class="form-group">
+<label>Empresa</label>
+<input type="text" name="empresa" placeholder="Nome da empresa">
+</div>
+<div class="form-group">
+<label>Interesse</label>
+<select name="servico" required>
+<option value="" disabled selected>Selecione um serviço</option>
+<option>Instagram Automático</option>
+<option>Checkout e Entrega Digital</option>
+<option>SEO Automatizado</option>
+<option>Atendimento WhatsApp IA</option>
+<option>Funil de Vendas IA</option>
+<option>Site e E-commerce</option>
+<option>Pacote Completo</option>
+<option>Outro</option>
+</select>
+</div>
+<div class="form-group">
+<label>Mensagem</label>
+<textarea name="mensagem" rows="4" placeholder="Conte um pouco sobre seu projeto..."></textarea>
+</div>
+<button type="submit" class="btn-gradient btn-large" id="contactBtn">Enviar mensagem</button>
+</form>
+<div class="form-success" id="contactSuccess">
+<h3>✓ Mensagem enviada!</h3>
+<p>Retornaremos em até 24 horas.</p>
+</div>
+<ul class="contact-bullets">
+<li>Diagnóstico gratuito</li>
+<li>Resultado em até 7 dias</li>
+<li>Sem taxa de setup</li>
+</ul>
+</div>
+</div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+<div class="container footer-inner">
+<a href="#inicio" class="logo"><span>⚡</span>FullForge</a>
+<div class="footer-links">
+<a href="#servicos">Serviços</a>
+<a href="#precos">Preços</a>
+<a href="#cases">Cases</a>
+<a href="#contato">Contato</a>
+</div>
+<div class="footer-socials">
+<a href="#">📸 Instagram</a>
+<a href="#">💬 WhatsApp</a>
+<a href="#">💼 LinkedIn</a>
+</div>
+<div class="footer-copy">
+<p>© 2026 FullForge. Todos os direitos reservados.</p>
+<p>Automação full stack para negócios que crescem.</p>
+</div>
+</div>
+</footer>
+
+<!-- Modal Lead -->
+<div class="modal" id="modal-lead">
+<div class="modal-overlay" onclick="closeModal()"></div>
+<div class="modal-card">
+<button class="modal-close" onclick="closeModal()">&times;</button>
+<h2>Fale com a FullForge</h2>
+<p>Diagnóstico gratuito · Resposta em até 24h</p>
+<form id="modalForm" onsubmit="handleSubmit(event,'modalForm','modalSuccess')">
+<div class="form-group">
+<label>Nome completo</label>
+<input type="text" name="nome" required placeholder="Seu nome">
+</div>
+<div class="form-group">
+<label>E-mail</label>
+<input type="email" name="email" required placeholder="seu@email.com">
+</div>
+<div class="form-group">
+<label>WhatsApp com DDD</label>
+<input type="tel" name="whatsapp" required placeholder="(11) 99999-9999">
+</div>
+<div class="form-group">
+<label>Empresa</label>
+<input type="text" name="empresa" placeholder="Nome da empresa">
+</div>
+<div class="form-group">
+<label>Interesse</label>
+<select name="servico" id="modalServico" required>
+<option value="" disabled>Selecione um serviço</option>
+<option>Instagram Automático</option>
+<option>Checkout e Entrega Digital</option>
+<option>SEO Automatizado</option>
+<option>Atendimento WhatsApp IA</option>
+<option>Funil de Vendas IA</option>
+<option>Site e E-commerce</option>
+<option>Pacote Completo</option>
+<option>Outro</option>
+</select>
+</div>
+<div class="form-group">
+<label>Mensagem</label>
+<textarea name="mensagem" rows="4" placeholder="Conte um pouco sobre seu projeto..."></textarea>
+</div>
+<button type="submit" class="btn-gradient btn-large" id="modalBtn">Enviar mensagem</button>
+</form>
+<div class="form-success" id="modalSuccess">
+<h3>✓ Mensagem enviada!</h3>
+<p>Retornaremos em até 24 horas.</p>
+</div>
+</div>
+</div>
+
+<script>
+// Header scroll effect
+const header=document.getElementById('header');
+window.addEventListener('scroll',()=>{
+if(window.scrollY>50){header.style.background='rgba(10,10,15,0.95)'}
+else{header.style.background='rgba(10,10,15,0.85)'}
+});
+
+// Mobile menu
+function toggleMenu(){
+const nav=document.getElementById('navMobile');
+nav.style.display=nav.style.display==='flex'?'none':'flex';
+}
+
+// Modal
+function openModal(servico){
+document.getElementById('modal-lead').style.display='flex';
+document.body.style.overflow='hidden';
+if(servico){
+document.getElementById('modalServico').value=servico;
+}
+}
+function closeModal(){
+document.getElementById('modal-lead').style.display='none';
+document.body.style.overflow='';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+
+// IntersectionObserver fadeInUp
+const observer=new IntersectionObserver((entries)=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+entry.target.classList.add('visible');
+observer.unobserve(entry.target);
+}
+});
+},{threshold:0.15});
+document.querySelectorAll('.animate-on-scroll').forEach(el=>observer.observe(el));
+
+// Form submit
+async function handleSubmit(e,formId,successId){
+e.preventDefault();
+const form=document.getElementById(formId);
+const btn=form.querySelector('button[type="submit"]');
+const originalText=btn.textContent;
+btn.textContent='Enviando...';
+btn.disabled=true;
+const data={
+nome:form.nome.value,
+email:form.email.value,
+whatsapp:form.whatsapp.value,
+empresa:form.empresa.value,
+servico:form.servico.value,
+mensagem:form.mensagem.value
+};
+try{
+await fetch('https://gersonlieske.app.n8n.cloud/webhook/fullforge-lead',{
+method:'POST',
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify(data)
+});
+}catch(err){}
+form.style.display='none';
+document.getElementById(successId).style.display='block';
+btn.textContent=originalText;
+btn.disabled=false;
+}
+</script>
+</body>
+</html>
