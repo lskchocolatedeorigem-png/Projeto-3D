@@ -564,6 +564,8 @@ section#manuais p.mn-subtitulo {
 <!-- ==================== CONTATO RÁPIDO (AO LADO DOS SERVIÇOS) ==================== -->
   <!-- ================================================================= -->
 <!-- LEGISALIMENTOS — SEÇÃO "SERVIÇOS ONLINE" (ACESSO DE ASSINANTE)     -->
+<!-- Cole no lugar da seção #servicos-online anterior.                  -->
+<!-- Agora pede o e-mail SEMPRE (sem memória) e tem botão "Sair".       -->
 <!-- ================================================================= -->
 
 <section id="servicos-online" class="la-srv">
@@ -595,7 +597,10 @@ section#manuais p.mn-subtitulo {
 
     <!-- ÁREA LIBERADA (escondida até o login) -->
     <div class="la-srv__area" id="la-srv-area" hidden>
-      <div class="la-srv__bemvindo" id="la-srv-bemvindo"></div>
+      <div class="la-srv__topo">
+        <div class="la-srv__bemvindo" id="la-srv-bemvindo"></div>
+        <button type="button" class="la-srv__sair-btn" id="la-srv-sair-topo">Sair</button>
+      </div>
 
       <div class="la-srv__abas" role="tablist">
         <button class="la-srv__aba is-ativa" data-cat="todos">Todos</button>
@@ -641,7 +646,10 @@ section#manuais p.mn-subtitulo {
   .la-srv__assine{margin-top:18px !important;font-size:13.5px;color:#5b6b58}
   .la-srv__assine a{color:#2e7d32;font-weight:700}
 
-  .la-srv__bemvindo{text-align:center;font-size:15px;color:#2e7d32;font-weight:600;margin-bottom:22px}
+  .la-srv__topo{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+  .la-srv__bemvindo{text-align:center;font-size:15px;color:#2e7d32;font-weight:600}
+  .la-srv__sair-btn{padding:8px 18px;background:#fff;color:#2e7d32;border:1px solid #cfe0cc;border-radius:20px;font-size:13.5px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .la-srv__sair-btn:hover{background:#eafbe7;border-color:#4caf50}
 
   .la-srv__abas{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:26px}
   .la-srv__aba{padding:10px 20px;border:1px solid #cfe6cc;background:#fff;color:#3a6b39;cursor:pointer;border-radius:24px;font-size:14px;font-weight:600;transition:all .15s ease}
@@ -665,11 +673,9 @@ section#manuais p.mn-subtitulo {
 
 <script>
 (function(){
-  // ===== CONFIGURAÇÃO =====
   var BASE = "https://legisalimentos.app.n8n.cloud";
   var VERIFICAR_URL = BASE + "/webhook/verificar-acesso";
 
-  // Serviços restritos. cat: "consulta" | "documentos" | "gestao"
   var SERVICOS = [
     { cat:"consulta",   ico:"🔎",  titulo:"Consultar legislação por cidade", desc:"Normas municipais, estaduais e federais", url:"/form/898b9ce4-4f23-4a3c-a77d-82ffd38e7334" },
     { cat:"consulta",   ico:"❓",  titulo:"Perguntas e respostas", desc:"Tire uma dúvida e receba por e-mail", url:"/form/3a14593c-2b61-4a6b-ba97-0cf42b49f12a" },
@@ -714,15 +720,14 @@ section#manuais p.mn-subtitulo {
     var val  = (dados && dados.validade) ? (" • válido até " + String(dados.validade).slice(0,10)) : "";
     bemvindo.textContent = "✅ Acesso liberado" + (nome ? ", " + nome : "") + val;
     render("todos");
-    try { localStorage.setItem("la_srv_ok", JSON.stringify({ email: dados.email || emailIn.value, exp: Date.now() + 43200000 })); } catch(e){}
   }
 
   function sair(){
-    try { localStorage.removeItem("la_srv_ok"); } catch(e){}
     area.hidden = true;
     loginBox.hidden = false;
     msg.textContent = ""; msg.className = "la-srv__msg";
     emailIn.value = "";
+    try { document.getElementById("servicos-online").scrollIntoView({ behavior:"smooth", block:"start" }); } catch(e){}
   }
 
   form.addEventListener("submit", function(e){
@@ -760,12 +765,9 @@ section#manuais p.mn-subtitulo {
     });
   });
 
+  // Sair (link do rodapé e botão do topo)
   document.getElementById("la-srv-sair").addEventListener("click", function(e){ e.preventDefault(); sair(); });
-
-  try {
-    var saved = JSON.parse(localStorage.getItem("la_srv_ok") || "null");
-    if(saved && saved.exp > Date.now()){ liberar(saved); }
-  } catch(e){}
+  document.getElementById("la-srv-sair-topo").addEventListener("click", function(){ sair(); });
 })();
 </script>
 <!-- ================ FIM DA SEÇÃO SERVIÇOS (ASSINANTE) ================ -->
