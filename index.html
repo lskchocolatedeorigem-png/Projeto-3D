@@ -561,156 +561,82 @@ section#manuais p.mn-subtitulo {
     <div id="services-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
   </div>
 </section>
-<!-- ==================== CONTATO RÁPIDO (AO LADO DOS SERVIÇOS) ==================== -->
-  <!-- ================================================================= -->
-<!-- LEGISALIMENTOS — SEÇÃO "SERVIÇOS ONLINE" (ACESSO DE ASSINANTE)     -->
+<!-- ================================================================= -->
+<!-- LEGISALIMENTOS — SEÇÃO "SERVIÇOS ONLINE" (CONSULTAS ABERTAS)       -->
 <!-- Cole no lugar da seção #servicos-online anterior.                  -->
-<!-- Agora pede o e-mail SEMPRE (sem memória) e tem botão "Sair".       -->
+<!-- Consultas (legislação, perguntas, chat) LIBERADAS para todos.      -->
+<!-- Entregáveis (documentos/rótulos/manuais/painel) ficam com cadeado; -->
+<!-- assinante pago faz login opcional para desbloqueá-los.             -->
 <!-- ================================================================= -->
 
 <section id="servicos-online" class="la-srv">
   <div class="la-srv__wrap">
 
     <header class="la-srv__head">
-      <span class="la-srv__badge">🔐 Área do assinante</span>
+      <span class="la-srv__badge">🥗 Serviços online</span>
       <h2>Serviços Online de Conformidade</h2>
-      <p>Gere documentos, consulte a legislação e tire dúvidas de conformidade
-         sanitária em minutos. Acesso exclusivo para assinantes.</p>
+      <p>Consulte a legislação e tire dúvidas de conformidade sanitária gratuitamente.
+         Para gerar documentos, rótulos e manuais, assine um plano.</p>
     </header>
 
-    <!-- PORTÃO DE ACESSO (login por e-mail) -->
-    <div class="la-srv__login" id="la-srv-login">
-      <div class="la-srv__login-card">
-        <h3>Entrar na área de serviços</h3>
-        <p>Informe o e-mail da sua assinatura para liberar as ferramentas.</p>
-        <form id="la-srv-form">
-          <input type="email" id="la-srv-email" placeholder="seu@email.com" required autocomplete="email">
-          <button type="submit" id="la-srv-btn">Acessar</button>
-        </form>
-        <div class="la-srv__msg" id="la-srv-msg"></div>
-        <p class="la-srv__assine">
-          Ainda não é assinante?
-          <a href="#servicos-planos" id="la-srv-assinar">Assine aqui</a> para liberar o acesso.
-        </p>
+    <!-- BARRA DE ASSINANTE (login opcional p/ desbloquear entregáveis) -->
+    <div class="la-srv__barra" id="la-srv-barra">
+      <div class="la-srv__barra-info" id="la-srv-barra-info">
+        <strong>É assinante?</strong> Entre com o e-mail da sua assinatura para desbloquear os documentos, rótulos e manuais.
       </div>
+      <form id="la-srv-form" class="la-srv__barra-form">
+        <input type="email" id="la-srv-email" placeholder="seu@email.com" autocomplete="email">
+        <button type="submit" id="la-srv-btn">Entrar</button>
+      </form>
+      <button type="button" class="la-srv__sair-btn" id="la-srv-sair-topo" hidden>Sair</button>
+    </div>
+    <div class="la-srv__msg" id="la-srv-msg"></div>
+    <div class="la-srv__bemvindo" id="la-srv-bemvindo" hidden></div>
+
+    <!-- ABAS + GRADE (sempre visíveis) -->
+    <div class="la-srv__abas" role="tablist">
+      <button class="la-srv__aba is-ativa" data-cat="todos">Todos</button>
+      <button class="la-srv__aba" data-cat="consulta">Consultas &amp; dúvidas</button>
+      <button class="la-srv__aba" data-cat="documentos">Documentos &amp; rotulagem</button>
+      <button class="la-srv__aba" data-cat="gestao">Cadastro &amp; painel</button>
     </div>
 
-    <!-- ÁREA LIBERADA (escondida até o login) -->
-    <div class="la-srv__area" id="la-srv-area" hidden>
-      <div class="la-srv__topo">
-        <div class="la-srv__bemvindo" id="la-srv-bemvindo"></div>
-        <button type="button" class="la-srv__sair-btn" id="la-srv-sair-topo">Sair</button>
-      </div>
+    <div class="la-srv__grade" id="la-srv-grade"></div>
 
-      <div class="la-srv__abas" role="tablist">
-        <button class="la-srv__aba is-ativa" data-cat="todos">Todos</button>
-        <button class="la-srv__aba" data-cat="consulta">Consultas &amp; dúvidas</button>
-        <button class="la-srv__aba" data-cat="documentos">Documentos &amp; rotulagem</button>
-        <button class="la-srv__aba" data-cat="gestao">Cadastro &amp; painel</button>
-      </div>
-
-      <div class="la-srv__grade" id="la-srv-grade"></div>
-
-      <p class="la-srv__aviso">
-        Resultados gerados por IA como ponto de partida. Confira sempre nas fontes oficiais
-        (ANVISA, MAPA, vigilância sanitária e prefeitura) ou consulte a LegisAlimentos.
-        <br><a href="#" id="la-srv-sair">Sair da área do assinante</a>
-      </p>
-    </div>
+    <p class="la-srv__aviso">
+      Resultados gerados por IA como ponto de partida. Confira sempre nas fontes oficiais
+      (ANVISA, MAPA, vigilância sanitária e prefeitura) ou consulte a LegisAlimentos.
+    </p>
 
   </div>
 </section>
-<!-- ================================================================= -->
-<!-- SEÇÃO: CHAT DE CONFORMIDADE (ABERTO A TODOS) — LegisAlimentos     -->
-<!-- ================================================================= -->
-<section id="chat-conformidade">
-  <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
 
-  <style>
-    .la-chat-wrap{max-width:820px;margin:0 auto;padding:48px 20px;font-family:Arial,Helvetica,sans-serif;color:#1f2937}
-    .la-chat-wrap h2{font-size:30px;font-weight:800;text-align:center;margin:0 0 8px;color:#166534}
-    .la-chat-wrap .la-chat-sub{text-align:center;color:#4b5563;font-size:16px;line-height:1.6;margin:0 auto 28px;max-width:620px}
-    #la-chat-widget{margin-top:8px;height:560px;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden}
-    :root{
-      --chat--color-primary:#16a34a;
-      --chat--color-primary-shade-50:#15803d;
-      --chat--color-primary-shade-100:#166534;
-      --chat--color-secondary:#22c55e;
-      --chat--header--background:#166534;
-      --chat--header--color:#ffffff;
-      --chat--toggle--background:#16a34a;
-      --chat--message--user--background:#16a34a;
-      --chat--window--width:100%;
-      --chat--window--height:100%;
-    }
-    #la-chat-widget .chat-layout{height:100%}
-  </style>
-
-  <div class="la-chat-wrap">
-    <h2>Assistente de Conformidade</h2>
-    <p class="la-chat-sub">Tire suas dúvidas sobre normas sanitárias de alimentos direto com nosso assistente. Gratuito — pergunte à vontade e confira sempre nas fontes oficiais.</p>
-    <div id="la-chat-widget"></div>
-  </div>
-
-  <script type="module">
-    import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
-
-    const CHAT_WEBHOOK_URL = 'https://legisalimentos.app.n8n.cloud/webhook/e01b4af4-619a-48a1-a187-0ac092dd8c7c/chat';
-
-    createChat({
-      webhookUrl: CHAT_WEBHOOK_URL,
-      target: '#la-chat-widget',
-      mode: 'fullscreen',
-      showWelcomeScreen: false,
-      loadPreviousSession: true,
-      initialMessages: [
-        'Olá! Sou o assistente de conformidade sanitária de alimentos da LegisAlimentos.',
-        'Pergunte à vontade (ex.: "posso vender bolos caseiros sem registro?"). Confira sempre as respostas nas fontes oficiais.'
-      ],
-      i18n: {
-        en: {
-          title: 'Assistente de Conformidade',
-          subtitle: 'Tire suas dúvidas sobre normas de alimentos.',
-          inputPlaceholder: 'Digite sua pergunta...',
-          getStarted: 'Nova conversa',
-          closeButtonTooltip: 'Fechar'
-        }
-      }
-    });
-  </script>
-</section>
-<!-- ================= FIM SEÇÃO CHAT DE CONFORMIDADE ================= -->
 <style>
   .la-srv{background:#f4f8f3;padding:64px 16px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:#1f2937}
   .la-srv *{box-sizing:border-box}
   .la-srv__wrap{max-width:1040px;margin:0 auto}
-  .la-srv__head{text-align:center;margin-bottom:34px}
+  .la-srv__head{text-align:center;margin-bottom:26px}
   .la-srv__badge{display:inline-block;background:#eafbe7;color:#2e7d32;font-weight:700;font-size:13px;padding:6px 14px;border-radius:20px;margin-bottom:14px}
   .la-srv__head h2{margin:0 0 10px;font-size:30px;color:#152b14}
-  .la-srv__head p{margin:0 auto;max-width:600px;font-size:16px;color:#4b5563;line-height:1.6}
+  .la-srv__head p{margin:0 auto;max-width:620px;font-size:16px;color:#4b5563;line-height:1.6}
 
-  /* Login */
-  .la-srv__login{display:flex;justify-content:center}
-  .la-srv__login-card{background:#fff;border:1px solid #e2ece0;border-radius:18px;padding:32px 28px;max-width:440px;width:100%;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,.06)}
-  .la-srv__login-card h3{margin:0 0 6px;font-size:20px;color:#152b14}
-  .la-srv__login-card p{margin:0 0 18px;font-size:14.5px;color:#5b6b58}
-  #la-srv-form{display:flex;gap:8px;flex-wrap:wrap}
-  #la-srv-email{flex:1;min-width:180px;padding:12px 14px;border:1px solid #cfe0cc;border-radius:10px;font-size:15px}
-  #la-srv-btn{padding:12px 22px;background:#4caf50;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer}
+  /* Barra de assinante */
+  .la-srv__barra{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;background:#fff;border:1px solid #e2ece0;border-radius:14px;padding:16px 20px;max-width:760px;margin:0 auto;box-shadow:0 3px 10px rgba(0,0,0,.04)}
+  .la-srv__barra-info{font-size:14px;color:#4b5563;flex:1;min-width:220px}
+  .la-srv__barra-info strong{color:#152b14}
+  .la-srv__barra-form{display:flex;gap:8px;flex-wrap:wrap}
+  #la-srv-email{min-width:180px;padding:11px 14px;border:1px solid #cfe0cc;border-radius:10px;font-size:15px}
+  #la-srv-btn{padding:11px 22px;background:#4caf50;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer}
   #la-srv-btn:hover{background:#3d9142}
   #la-srv-btn:disabled{opacity:.6;cursor:not-allowed}
-  .la-srv__msg{margin-top:14px;font-size:14px;min-height:20px}
+  .la-srv__sair-btn{padding:9px 18px;background:#fff;color:#2e7d32;border:1px solid #cfe0cc;border-radius:20px;font-size:13.5px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .la-srv__sair-btn:hover{background:#eafbe7;border-color:#4caf50}
+  .la-srv__msg{text-align:center;margin:12px auto 0;font-size:14px;min-height:20px;max-width:760px}
   .la-srv__msg.ok{color:#1a7f37}
   .la-srv__msg.erro{color:#c0392b}
-  .la-srv__assine{margin-top:18px !important;font-size:13.5px;color:#5b6b58}
-  .la-srv__assine a{color:#2e7d32;font-weight:700}
+  .la-srv__bemvindo{text-align:center;font-size:15px;color:#2e7d32;font-weight:600;margin:12px auto 0}
 
-  .la-srv__topo{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:22px}
-  .la-srv__bemvindo{text-align:center;font-size:15px;color:#2e7d32;font-weight:600}
-  .la-srv__sair-btn{padding:8px 18px;background:#fff;color:#2e7d32;border:1px solid #cfe0cc;border-radius:20px;font-size:13.5px;font-weight:700;cursor:pointer;transition:all .15s ease}
-  .la-srv__sair-btn:hover{background:#eafbe7;border-color:#4caf50}
-
-  .la-srv__abas{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:26px}
+  .la-srv__abas{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:26px 0}
   .la-srv__aba{padding:10px 20px;border:1px solid #cfe6cc;background:#fff;color:#3a6b39;cursor:pointer;border-radius:24px;font-size:14px;font-weight:600;transition:all .15s ease}
   .la-srv__aba:hover{border-color:#4caf50}
   .la-srv__aba.is-ativa{background:#4caf50;color:#fff;border-color:#4caf50}
@@ -723,70 +649,116 @@ section#manuais p.mn-subtitulo {
   .la-srv__txt strong{display:block;font-size:16px;color:#152b14}
   .la-srv__txt span{display:block;font-size:13.5px;color:#667;margin-top:4px;line-height:1.45}
   .la-srv__arrow{align-self:center;color:#4caf50;font-size:24px;font-weight:700}
+  .la-srv__selo-free{display:inline-block;margin-top:8px;background:#eafbe7;color:#2e7d32;font-size:12px;font-weight:700;padding:3px 10px;border-radius:12px}
+
+  .la-srv__card--bloq{opacity:.7;background:#f6f7f6;border-style:dashed}
+  .la-srv__card--bloq:hover{transform:none;box-shadow:0 3px 10px rgba(0,0,0,.05)}
+  .la-srv__card--bloq .la-srv__ico{background:#eee}
+  .la-srv__selo-bloq{display:inline-block;margin-top:8px;background:#fff3d6;color:#8a5b00;font-size:12px;font-weight:700;padding:3px 10px;border-radius:12px}
 
   .la-srv__aviso{text-align:center;font-size:13px;color:#6b7280;margin-top:30px;line-height:1.6}
-  .la-srv__aviso a{color:#8a94a6}
 
   @media(max-width:600px){.la-srv{padding:48px 14px}.la-srv__head h2{font-size:24px}}
 </style>
 
 <script>
 (function(){
+  // ===== CONFIGURAÇÃO =====
   var BASE = "https://legisalimentos.app.n8n.cloud";
   var VERIFICAR_URL = BASE + "/webhook/verificar-acesso";
 
+  // acesso: "livre" = aberto a todos | "pago" = só assinante pago (login)
+  // O Chat aponta para a seção aberta #chat-conformidade na própria página.
   var SERVICOS = [
-    { cat:"consulta",   ico:"🔎",  titulo:"Consultar legislação por cidade", desc:"Normas municipais, estaduais e federais", url:"/form/898b9ce4-4f23-4a3c-a77d-82ffd38e7334" },
-    { cat:"consulta",   ico:"❓",  titulo:"Perguntas e respostas", desc:"Tire uma dúvida e receba por e-mail", url:"/form/3a14593c-2b61-4a6b-ba97-0cf42b49f12a" },
-    { cat:"consulta",   ico:"💬",  titulo:"Chat com IA", desc:"Converse em tempo real sobre conformidade", url:"/webhook/e01b4af4-619a-48a1-a187-0ac092dd8c7c/chat" },
-    { cat:"documentos", ico:"📄",  titulo:"Gerar documento (PDF)", desc:"Checklist e relatório de conformidade", url:"/form/ede7c5f6-66e4-4273-9a26-c05f34a87a72" },
-    { cat:"documentos", ico:"🏷️", titulo:"Tabela nutricional e rotulagem", desc:"Tabela (base TACO) e análise da lupa (PDF)", url:"/form/a2f7c1e0-rotulagem-legisalimentos01" },
-    { cat:"documentos", ico:"📋",  titulo:"Rótulo completo (ANVISA)", desc:"Monte o rótulo e receba o checklist legal", url:"/form/b3d9e1f0-rotcompleta-legisalimentos1" },
-    { cat:"documentos", ico:"📝",  titulo:"Ficha técnica de produto", desc:"Formulação, processo, qualidade e embalagem", url:"/form/c5a1e2d0-fichatecnica-legisalim01" },
-    { cat:"documentos", ico:"📑",  titulo:"Manuais BPF, POP e APPCC", desc:"Gere a minuta do documento técnico (PDF)", url:"/form/390fe4d3-8d6b-43a9-a585-0fa39f737689" },
-    { cat:"gestao",     ico:"🏪",  titulo:"Cadastrar estabelecimento", desc:"Cadastre e receba alertas de licença", url:"/form/5a6d55b7-e907-4336-8196-a738347e9c8c" },
-    { cat:"gestao",     ico:"📊",  titulo:"Painel de conformidade", desc:"Situação, score e mudanças por estabelecimento", url:"/form/painel-form-webhook" }
+    { cat:"consulta",   acesso:"livre", ico:"🔎",  titulo:"Consultar legislação por cidade", desc:"Normas municipais, estaduais e federais", url:"/form/898b9ce4-4f23-4a3c-a77d-82ffd38e7334" },
+    { cat:"consulta",   acesso:"livre", ico:"❓",  titulo:"Perguntas e respostas", desc:"Tire uma dúvida e receba por e-mail", url:"/form/3a14593c-2b61-4a6b-ba97-0cf42b49f12a" },
+    { cat:"consulta",   acesso:"livre", ico:"💬",  titulo:"Chat com IA", desc:"Converse em tempo real sobre conformidade", url:"#chat-conformidade", interno:true },
+    { cat:"documentos", acesso:"pago",  ico:"📄",  titulo:"Gerar documento (PDF)", desc:"Checklist e relatório de conformidade", url:"/form/ede7c5f6-66e4-4273-9a26-c05f34a87a72" },
+    { cat:"documentos", acesso:"pago",  ico:"🏷️", titulo:"Tabela nutricional e rotulagem", desc:"Tabela (base TACO) e análise da lupa (PDF)", url:"/form/a2f7c1e0-rotulagem-legisalimentos01" },
+    { cat:"documentos", acesso:"pago",  ico:"📋",  titulo:"Rótulo completo (ANVISA)", desc:"Monte o rótulo e receba o checklist legal", url:"/form/b3d9e1f0-rotcompleta-legisalimentos1" },
+    { cat:"documentos", acesso:"pago",  ico:"📝",  titulo:"Ficha técnica de produto", desc:"Formulação, processo, qualidade e embalagem", url:"/form/c5a1e2d0-fichatecnica-legisalim01" },
+    { cat:"documentos", acesso:"pago",  ico:"📑",  titulo:"Manuais BPF, POP e APPCC", desc:"Gere a minuta do documento técnico (PDF)", url:"/form/390fe4d3-8d6b-43a9-a585-0fa39f737689" },
+    { cat:"gestao",     acesso:"pago",  ico:"🏪",  titulo:"Cadastrar estabelecimento", desc:"Cadastre e receba alertas de licença", url:"/form/5a6d55b7-e907-4336-8196-a738347e9c8c" },
+    { cat:"gestao",     acesso:"pago",  ico:"📊",  titulo:"Painel de conformidade", desc:"Situação, score e mudanças por estabelecimento", url:"/form/painel-form-webhook" }
   ];
 
-  var loginBox = document.getElementById("la-srv-login");
-  var area     = document.getElementById("la-srv-area");
+  var planoAtual = "";     // preenchido no login
+  var logado     = false;
+
   var grade    = document.getElementById("la-srv-grade");
   var form     = document.getElementById("la-srv-form");
   var emailIn  = document.getElementById("la-srv-email");
   var btn      = document.getElementById("la-srv-btn");
   var msg      = document.getElementById("la-srv-msg");
   var bemvindo = document.getElementById("la-srv-bemvindo");
+  var barraInfo= document.getElementById("la-srv-barra-info");
+  var sairBtn  = document.getElementById("la-srv-sair-topo");
+
+  // Assinante PAGO (qualquer plano ativo que não seja "teste") desbloqueia os entregáveis.
+  function ehPago(){ return logado && (planoAtual || "").toLowerCase() !== "teste"; }
 
   function render(cat){
     grade.innerHTML = "";
     SERVICOS.filter(function(s){ return cat === "todos" || s.cat === cat; })
       .forEach(function(s){
+        var liberado = (s.acesso === "livre") || ehPago();
+        if(!liberado){
+          var d = document.createElement("a");
+          d.className = "la-srv__card la-srv__card--bloq";
+          d.href = "#servicos-planos";
+          d.innerHTML =
+            '<div class="la-srv__ico">🔒</div>' +
+            '<div class="la-srv__txt"><strong>' + s.titulo + '</strong><span>' + s.desc + '</span>' +
+            '<span class="la-srv__selo-bloq">Assine para liberar</span></div>' +
+            '<div class="la-srv__arrow">›</div>';
+          grade.appendChild(d);
+          return;
+        }
         var a = document.createElement("a");
         a.className = "la-srv__card";
-        a.href = BASE + s.url; a.target = "_blank"; a.rel = "noopener";
+        if(s.interno){ a.href = s.url; }
+        else { a.href = BASE + s.url; a.target = "_blank"; a.rel = "noopener"; }
+        var selo = (s.acesso === "livre") ? '<span class="la-srv__selo-free">🎁 Acesso liberado</span>' : '';
         a.innerHTML =
           '<div class="la-srv__ico">' + s.ico + '</div>' +
-          '<div class="la-srv__txt"><strong>' + s.titulo + '</strong><span>' + s.desc + '</span></div>' +
+          '<div class="la-srv__txt"><strong>' + s.titulo + '</strong><span>' + s.desc + '</span>' + selo + '</div>' +
           '<div class="la-srv__arrow">›</div>';
         grade.appendChild(a);
       });
   }
 
-  function liberar(dados){
-    loginBox.hidden = true;
-    area.hidden = false;
+  function entrar(dados){
+    logado = true;
+    planoAtual = (dados && dados.plano) ? dados.plano : "";
     var nome = (dados && dados.nome) ? dados.nome.split(" ")[0] : "";
     var val  = (dados && dados.validade) ? (" • válido até " + String(dados.validade).slice(0,10)) : "";
-    bemvindo.textContent = "✅ Acesso liberado" + (nome ? ", " + nome : "") + val;
-    render("todos");
+    form.hidden = true;
+    barraInfo.hidden = true;
+    sairBtn.hidden = false;
+    bemvindo.hidden = false;
+    if(ehPago()){
+      bemvindo.textContent = "✅ Acesso completo liberado" + (nome ? ", " + nome : "") + val;
+    } else {
+      bemvindo.textContent = "✅ Acesso de teste" + (nome ? ", " + nome : "") + " — as consultas já são gratuitas; assine para liberar os documentos." + val;
+    }
+    msg.textContent = ""; msg.className = "la-srv__msg";
+    render(abaAtiva());
   }
 
   function sair(){
-    area.hidden = true;
-    loginBox.hidden = false;
+    logado = false; planoAtual = "";
+    form.hidden = false;
+    form.reset();
+    barraInfo.hidden = false;
+    sairBtn.hidden = true;
+    bemvindo.hidden = true;
     msg.textContent = ""; msg.className = "la-srv__msg";
-    emailIn.value = "";
-    try { document.getElementById("servicos-online").scrollIntoView({ behavior:"smooth", block:"start" }); } catch(e){}
+    render(abaAtiva());
+  }
+
+  function abaAtiva(){
+    var a = document.querySelector(".la-srv__aba.is-ativa");
+    return a ? a.dataset.cat : "todos";
   }
 
   form.addEventListener("submit", function(e){
@@ -803,10 +775,10 @@ section#manuais p.mn-subtitulo {
     .then(function(r){ return r.json(); })
     .then(function(j){
       if(j && j.acesso_liberado){
-        liberar(j);
+        entrar(j);
       }else{
         msg.className = "la-srv__msg erro";
-        msg.textContent = (j && j.mensagem) ? j.mensagem : "E-mail sem assinatura ativa.";
+        msg.textContent = (j && j.mensagem) ? j.mensagem : "E-mail sem assinatura ativa. As consultas continuam gratuitas abaixo.";
       }
     })
     .catch(function(){
@@ -816,6 +788,7 @@ section#manuais p.mn-subtitulo {
     .finally(function(){ btn.disabled = false; });
   });
 
+  // Abas
   document.querySelectorAll(".la-srv__aba").forEach(function(b){
     b.addEventListener("click", function(){
       document.querySelectorAll(".la-srv__aba").forEach(function(x){ x.classList.remove("is-ativa"); });
@@ -824,12 +797,13 @@ section#manuais p.mn-subtitulo {
     });
   });
 
-  // Sair (link do rodapé e botão do topo)
-  document.getElementById("la-srv-sair").addEventListener("click", function(e){ e.preventDefault(); sair(); });
-  document.getElementById("la-srv-sair-topo").addEventListener("click", function(){ sair(); });
+  sairBtn.addEventListener("click", function(){ sair(); });
+
+  // Estado inicial: consultas abertas, entregáveis com cadeado.
+  render("todos");
 })();
 </script>
-<!-- ================ FIM DA SEÇÃO SERVIÇOS (ASSINANTE) ================ -->
+<!-- ================ FIM DA SEÇÃO SERVIÇOS (CONSULTAS ABERTAS) ================ -->
 <section id="contato-rapido" class="py-24 bg-dark-50 relative">
   <div class="absolute top-0 right-0 w-96 h-96 bg-accent-100 rounded-full blur-3xl opacity-20 -translate-y-1/2 translate-x-1/2"></div>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
