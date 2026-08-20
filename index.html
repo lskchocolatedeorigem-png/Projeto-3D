@@ -620,7 +620,163 @@ section#manuais p.mn-subtitulo {
 
   </div>
 </section>
+<!-- ================================================================= -->
+<!-- SEÇÃO: CHAT DE CONFORMIDADE (ASSINANTE) — LegisAlimentos          -->
+<!-- ================================================================= -->
+<section id="chat-conformidade">
+  <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
 
+  <style>
+    .la-chat-wrap{max-width:820px;margin:0 auto;padding:48px 20px;font-family:Arial,Helvetica,sans-serif;color:#1f2937}
+    .la-chat-wrap h2{font-size:30px;font-weight:800;text-align:center;margin:0 0 8px;color:#166534}
+    .la-chat-wrap .la-chat-sub{text-align:center;color:#4b5563;font-size:16px;line-height:1.6;margin:0 auto 28px;max-width:620px}
+    .la-chat-login{max-width:460px;margin:0 auto;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:16px;padding:28px}
+    .la-chat-login label{display:block;font-size:14px;font-weight:700;color:#166534;margin:0 0 8px}
+    .la-chat-login input{width:100%;box-sizing:border-box;padding:13px 14px;border:1px solid #86efac;border-radius:10px;font-size:15px;outline:none}
+    .la-chat-login input:focus{border-color:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.2)}
+    .la-chat-btn{width:100%;margin-top:14px;background:#16a34a;color:#fff;border:0;border-radius:10px;padding:14px;font-size:16px;font-weight:700;cursor:pointer;transition:background .2s}
+    .la-chat-btn:hover{background:#15803d}
+    .la-chat-btn:disabled{opacity:.6;cursor:not-allowed}
+    .la-chat-msg{margin-top:14px;font-size:14px;line-height:1.5;text-align:center;display:none}
+    .la-chat-msg.err{color:#b91c1c;display:block}
+    .la-chat-msg.ok{color:#166534;display:block}
+    .la-chat-hint{text-align:center;font-size:13px;color:#6b7280;margin-top:16px}
+    .la-chat-hint a{color:#16a34a;font-weight:700;text-decoration:none}
+    #la-chat-widget{display:none;margin-top:8px;height:560px;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden}
+    .la-chat-topbar{display:none;max-width:820px;margin:0 auto 10px;align-items:center;justify-content:space-between}
+    .la-chat-topbar .who{font-size:14px;color:#166534;font-weight:700}
+    .la-chat-topbar button{background:none;border:0;color:#6b7280;font-size:13px;cursor:pointer;text-decoration:underline}
+    :root{
+      --chat--color-primary:#16a34a;
+      --chat--color-primary-shade-50:#15803d;
+      --chat--color-primary-shade-100:#166534;
+      --chat--color-secondary:#22c55e;
+      --chat--header--background:#166534;
+      --chat--header--color:#ffffff;
+      --chat--toggle--background:#16a34a;
+      --chat--message--user--background:#16a34a;
+      --chat--window--width:100%;
+      --chat--window--height:100%;
+    }
+    #la-chat-widget .chat-layout{height:100%}
+  </style>
+
+  <div class="la-chat-wrap">
+    <h2>Assistente de Conformidade</h2>
+    <p class="la-chat-sub">Tire suas dúvidas sobre normas sanitárias de alimentos direto com nosso assistente. Exclusivo para assinantes — informe o e-mail da sua assinatura para começar.</p>
+
+    <div class="la-chat-login" id="la-chat-login">
+      <label for="la-chat-email">E-mail da sua assinatura</label>
+      <input type="email" id="la-chat-email" placeholder="seu@email.com" autocomplete="email" />
+      <button class="la-chat-btn" id="la-chat-enter">Entrar no assistente</button>
+      <div class="la-chat-msg" id="la-chat-feedback"></div>
+      <div class="la-chat-hint">Ainda não é assinante? <a href="#servicos-planos">Ver planos e assinar</a></div>
+    </div>
+
+    <div class="la-chat-topbar" id="la-chat-topbar">
+      <span class="who" id="la-chat-who"></span>
+      <button id="la-chat-logout">Sair</button>
+    </div>
+
+    <div id="la-chat-widget"></div>
+  </div>
+
+  <script type="module">
+    import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+
+    const VERIFICAR_URL = 'https://legisalimentos.app.n8n.cloud/webhook/verificar-acesso';
+    const CHAT_WEBHOOK_URL = 'https://legisalimentos.app.n8n.cloud/webhook/e01b4af4-619a-48a1-a187-0ac092dd8c7c/chat';
+
+    const loginBox = document.getElementById('la-chat-login');
+    const topbar   = document.getElementById('la-chat-topbar');
+    const widget   = document.getElementById('la-chat-widget');
+    const emailEl  = document.getElementById('la-chat-email');
+    const btn      = document.getElementById('la-chat-enter');
+    const feedback = document.getElementById('la-chat-feedback');
+    const whoEl    = document.getElementById('la-chat-who');
+    const logoutBtn= document.getElementById('la-chat-logout');
+
+    let chatMounted = false;
+
+    function showFeedback(text, tipo){
+      feedback.textContent = text;
+      feedback.className = 'la-chat-msg ' + (tipo || '');
+    }
+
+    function abrirChat(email){
+      loginBox.style.display = 'none';
+      topbar.style.display = 'flex';
+      widget.style.display = 'block';
+      whoEl.textContent = 'Conectado como ' + email;
+
+      if (!chatMounted){
+        createChat({
+          webhookUrl: CHAT_WEBHOOK_URL,
+          target: '#la-chat-widget',
+          mode: 'fullscreen',
+          metadata: { email: email },
+          showWelcomeScreen: false,
+          loadPreviousSession: true,
+          initialMessages: [
+            'Olá! Sou o assistente de conformidade sanitária de alimentos da LegisAlimentos.',
+            'Pergunte à vontade (ex.: "posso vender bolos caseiros sem registro?"). Confira sempre as respostas nas fontes oficiais.'
+          ],
+          i18n: {
+            en: {
+              title: 'Assistente de Conformidade',
+              subtitle: 'Tire suas dúvidas sobre normas de alimentos.',
+              inputPlaceholder: 'Digite sua pergunta...',
+              getStarted: 'Nova conversa',
+              closeButtonTooltip: 'Fechar'
+            }
+          }
+        });
+        chatMounted = true;
+      }
+    }
+
+    async function entrar(){
+      const email = (emailEl.value || '').trim().toLowerCase();
+      if (!email || !email.includes('@')){
+        showFeedback('Informe um e-mail válido.', 'err');
+        return;
+      }
+      btn.disabled = true;
+      showFeedback('Verificando sua assinatura...', 'ok');
+      try{
+        const resp = await fetch(VERIFICAR_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email })
+        });
+        const data = await resp.json();
+        if (data && data.acesso_liberado === true){
+          showFeedback('', '');
+          abrirChat(email);
+        } else {
+          const motivo = (data && data.mensagem) ? data.mensagem : 'Nenhuma assinatura ativa encontrada para este e-mail.';
+          showFeedback(motivo + ' Assine em nossos planos para usar o assistente.', 'err');
+        }
+      } catch (e){
+        showFeedback('Não foi possível verificar agora. Tente novamente em instantes.', 'err');
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    btn.addEventListener('click', entrar);
+    emailEl.addEventListener('keydown', function(ev){ if (ev.key === 'Enter') entrar(); });
+
+    logoutBtn.addEventListener('click', function(){
+      topbar.style.display = 'none';
+      widget.style.display = 'none';
+      loginBox.style.display = 'block';
+      emailEl.value = '';
+      showFeedback('', '');
+    });
+  </script>
+</section>
+<!-- ================= FIM SEÇÃO CHAT DE CONFORMIDADE ================= -->
 <style>
   .la-srv{background:#f4f8f3;padding:64px 16px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:#1f2937}
   .la-srv *{box-sizing:border-box}
