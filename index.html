@@ -877,6 +877,81 @@ section#manuais p.mn-subtitulo {
   </div>
 </section>
 <!-- ================================================================= -->
+<!-- SEÇÃO: CHAT DE CONFORMIDADE (ABERTO A TODOS) — LegisAlimentos     -->
+<!-- Cole este bloco LOGO ABAIXO da seção #servicos-online.           -->
+<!-- ================================================================= -->
+<section id="chat-conformidade">
+  <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+
+  <style>
+    #chat-conformidade{background:#ffffff;padding:8px 0 8px}
+    .la-chat-wrap{max-width:820px;margin:0 auto;padding:48px 20px;font-family:Arial,Helvetica,sans-serif;color:#1f2937}
+    .la-chat-wrap h2{font-size:30px;font-weight:800;text-align:center;margin:0 0 8px;color:#166534}
+    .la-chat-wrap .la-chat-sub{text-align:center;color:#4b5563;font-size:16px;line-height:1.6;margin:0 auto 24px;max-width:640px}
+    .la-chat-badge{display:inline-block;background:#eafbe7;color:#2e7d32;font-weight:700;font-size:13px;padding:6px 14px;border-radius:20px;margin:0 auto 12px}
+    .la-chat-head{text-align:center}
+    #la-chat-widget{margin-top:8px;height:560px;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden}
+    .la-chat-hint{text-align:center;font-size:13px;color:#6b7280;margin-top:16px;line-height:1.6}
+    :root{
+      --chat--color-primary:#16a34a;
+      --chat--color-primary-shade-50:#15803d;
+      --chat--color-primary-shade-100:#166534;
+      --chat--color-secondary:#22c55e;
+      --chat--header--background:#166534;
+      --chat--header--color:#ffffff;
+      --chat--toggle--background:#16a34a;
+      --chat--message--user--background:#16a34a;
+      --chat--window--width:100%;
+      --chat--window--height:100%;
+    }
+    #la-chat-widget .chat-layout{height:100%}
+    @media(max-width:600px){#la-chat-widget{height:70vh}}
+  </style>
+
+  <div class="la-chat-wrap">
+    <div class="la-chat-head">
+      <span class="la-chat-badge">💬 Gratuito</span>
+      <h2>Assistente de Conformidade</h2>
+      <p class="la-chat-sub">Tire suas dúvidas sobre normas sanitárias de alimentos direto com nosso assistente de IA. Uso gratuito — comece a conversar abaixo.</p>
+    </div>
+
+    <div id="la-chat-widget"></div>
+
+    <p class="la-chat-hint">
+      Respostas geradas por IA como ponto de partida. Confira sempre nas fontes oficiais
+      (ANVISA, MAPA, vigilância sanitária e prefeitura) ou consulte a LegisAlimentos.
+    </p>
+  </div>
+
+  <script type="module">
+    import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+
+    const CHAT_WEBHOOK_URL = 'https://legisalimentos.app.n8n.cloud/webhook/e01b4af4-619a-48a1-a187-0ac092dd8c7c/chat';
+
+    createChat({
+      webhookUrl: CHAT_WEBHOOK_URL,
+      target: '#la-chat-widget',
+      mode: 'fullscreen',
+      showWelcomeScreen: false,
+      loadPreviousSession: true,
+      initialMessages: [
+        'Olá! Sou o assistente de conformidade sanitária de alimentos da LegisAlimentos.',
+        'Pergunte à vontade (ex.: "posso vender bolos caseiros sem registro?"). Confira sempre as respostas nas fontes oficiais.'
+      ],
+      i18n: {
+        en: {
+          title: 'Assistente de Conformidade',
+          subtitle: 'Tire suas dúvidas sobre normas de alimentos.',
+          inputPlaceholder: 'Digite sua pergunta...',
+          getStarted: 'Nova conversa',
+          closeButtonTooltip: 'Fechar'
+        }
+      }
+    });
+  </script>
+</section>
+<!-- ================= FIM SEÇÃO CHAT DE CONFORMIDADE ================= -->  
+<!-- ================================================================= -->
 <!-- LEGISALIMENTOS — SEÇÃO "PLANOS / ASSINATURA"                       -->
 <!-- Cole este bloco logo ABAIXO da seção #servicos-online.            -->
 <!-- ================================================================= -->
